@@ -1,0 +1,4 @@
+FROM nginx:alpine
+
+MAINTAINER xiongl x583194811l@gmail.com
+RUN apk add --no-cache curl
