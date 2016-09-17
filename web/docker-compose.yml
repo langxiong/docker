@@ -14,11 +14,24 @@ services:
       #- 443:443
     links:
       - gogs
+    depends_on:
+      - dns
+
+  dns:
+    image: phensley/docker-dns
+    container_name: dns
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/docker.sock
+      #- g:/var/dns/dockerdns:/dockerdns
+    ports:
+      - 5080:80
+    command: --domain xl.com
 
   gogs:
     image: gogs/gogs
     container_name: gogs
-    hostname: gogs.xl.com
+    #hostname: gogs.xl.com
     restart: always
     volumes:
       - g:/var/gogs:/data
