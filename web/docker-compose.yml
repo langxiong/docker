@@ -23,14 +23,14 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/docker.sock
-      #- g:/var/dns/dockerdns:/dockerdns
+      - g:/var/dns/dockerdns:/dockerdns
     ports:
       - 5080:80
     command: --domain xl.com
 
   gogs:
     image: gogs/gogs
-    container_name: gogs
+    #container_name: gogs
     #hostname: gogs.xl.com
     restart: always
     volumes:
