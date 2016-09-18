@@ -35,3 +35,10 @@ services:
     restart: always
     volumes:
       - g:/var/gogs:/data
+    networks:
+      new:
+      legacy:
+
+networks:
+  new:
+  legacy:
