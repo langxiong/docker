@@ -1,0 +1,5 @@
+FROM golang:1.4
+
+RUN go get github.com/mailhog/MailHog
+
+ENTRYPOINT ["/go/bin/MailHog"]

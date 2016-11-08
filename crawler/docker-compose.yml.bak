@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    volumes:
+      - /var/docker/crawler/redis:/data
+    command: [
+      "redis-server", 
+      "--appendonly", 
+      "yes",
+      "--requirepass",
+      "xl-ppaa",
+    ]
+

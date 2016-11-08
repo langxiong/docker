@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  redis:
+    image: redis:latest
+    volumes:
+      - /var/docker/crawler/redis:/data
+      - ./redis.conf:/etc/redis/redis.conf
+    command: ["redis-server", "/etc/redis/redis.conf"]
+
