@@ -3,8 +3,20 @@ version: '2'
 services:
   redis:
     image: redis:latest
+    restart: always
     volumes:
-      - /var/docker/crawler/redis:/data
+      - /var/docker/crawler/redis/:/data/
       - ./redis.conf:/etc/redis/redis.conf
     command: ["redis-server", "/etc/redis/redis.conf"]
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    volumes:
+      - /var/docker/crawler/mysql/:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456 
+      - MYSQL_DATABASE=crawler
+      - MYSQL_USER=crawler
+      - MYSQL_PASSWORD=crawler
 
