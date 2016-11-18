@@ -1,6 +1,37 @@
 version: '2'
 
 services:
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx.docker
+    container_name: nginx 
+    restart: always
+    volumes:
+      - /var/docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - /var/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /var/docker/slate/build/:/var/docker/slate/build/
+    ports:
+      - 80:80
+      #- 443:443
+    links:
+      - gogs
+    depends_on:
+      - dns
+    networks:
+      app_net:
+
+  dns:
+    image: x583194811l/docker-dns
+    container_name: dns
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/docker.sock
+    command: --domain xl.com
+    networks:
+      app_net:
+        ipv4_address: 172.19.0.2
+
   gogs:
     image: gogs/gogs
     restart: always
@@ -8,18 +39,35 @@ services:
       - /var/docker/gogs:/data
     ports:
       - "10022:22"
+    networks:
+      app_net:
+
+  ifabchina:
+    image: node:6
+    restart: always
+    working_dir: /usr/src/app
+    volumes:
+      - /var/docker/ifabchina:/usr/src/app
+    command: bash -c "npm start && bash"
+    networks:
+      app_net:
 
   slate:
     image: grumpydocker/slate-builder
-    restart: always
+    # since this container is used for build slate documents.
+    # the ruby part of the dependency is too heavy for cpu usage.
+    restart: "no"
     volumes:
       - /var/docker/slate/source:/app/source
       - /var/docker/slate/build:/app/build
+    networks:
+      app_net:
 
-  mail:
-    build: 
-      context: .
-      dockerfile: mailhog.docker
-    volumes:
-      - /var/docker/mailhog:/maildir
-    command: /MailHog -storage maildir -maildir-path=/maildir
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.19.0.0/16
+        gateway: 172.19.0.1
