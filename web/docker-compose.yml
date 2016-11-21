@@ -1,26 +1,6 @@
 version: '2'
 
 services:
-  nginx:
-    build:
-      context: .
-      dockerfile: nginx.docker
-    container_name: nginx 
-    restart: always
-    volumes:
-      - /var/docker/nginx/conf.d/:/etc/nginx/conf.d/
-      - /var/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - /var/docker/slate/build/:/var/docker/slate/build/
-    ports:
-      - 80:80
-      #- 443:443
-    links:
-      - gogs
-    depends_on:
-      - dns
-    networks:
-      app_net:
-
   dns:
     image: x583194811l/docker-dns
     container_name: dns
